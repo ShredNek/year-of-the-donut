@@ -1,0 +1,104 @@
+:root {
+  --create-modal-transition-time-1: 750ms;
+  --create-modal-transition-time-2: 500ms;
+}
+
+button {
+  background: none;
+  color: inherit;
+  border: 0;
+  font: inherit;
+  cursor: pointer;
+}
+
+.create-modal__interface--true,
+.create-modal__interface--false {
+  font-family: cantarell;
+  font-weight: bold;
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  width: 500px;
+  top: 50%;
+  left: 50%;
+  translate: -50% -50%;
+  background-color: var(--main-app-bg-color-1);
+  color: black;
+  border-radius: 3px;
+  z-index: 200;
+  padding: 2rem;
+  transition: all var(--create-modal-transition-time-1) ease-in-out;
+}
+
+.create-modal__overlay--true,
+.create-modal__overlay--false {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0);
+  opacity: 60%;
+  z-index: 100;
+  transition: all var(--create-modal-transition-time-2) ease;
+}
+
+.create-modal__interface--false {
+  top: -50%;
+}
+
+.create-modal__overlay--false {
+  opacity: 0%;
+  z-index: -1;
+}
+
+.create-modal__close-button {
+  position: absolute;
+  width: 2rem;
+  height: 2rem;
+  right: 1rem;
+  top: 1rem;
+}
+
+.create-modal__title {
+  margin: 0rem auto 2rem auto;
+  font-size: 2.5rem;
+  text-align: center;
+  max-width: 90%;
+  color: var(--main-app-text-color-1);
+}
+
+.create-modal__form-details {
+  display: flex;
+  flex-direction: column;
+  background-color: rgb(232, 232, 232);
+  padding: 2rem;
+  border-radius: 3px;
+}
+
+.create-modal__form-details__form-heading {
+  margin: 1rem auto 1rem auto;
+  width: 80%;
+  font-style: italic;
+}
+
+.create-modal__form-details__textarea {
+  font-family: cantarell;
+  background-color: var(--doughnut-container-bg-color);
+  margin: auto;
+  width: 90%;
+  min-height: 6rem;
+  max-height: 12rem;
+  resize: vertical;
+  border: 0;
+  border-radius: 3px;
+}
+
+.create-modal__submit-button {
+  display: flex;
+  margin: 3rem auto auto auto;
+  padding: 1.25rem;
+  border-radius: 3px;
+  background-color: var(--main-app-text-color-1);
+  color: var(--doughnut-container-bg-color);
+}

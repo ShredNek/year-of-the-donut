@@ -1,0 +1,267 @@
+:root {
+  --doughnut-container-bg-color: rgb(248, 254, 255);
+  --doughnut-color: rgb(208, 208, 208);
+  --doughnut-segment-color-1: rgb(72, 25, 133);
+  --doughnut-segment-color-2: rgb(133, 75, 207);
+  --doughnut-segment-color-3: rgb(82, 203, 255);
+  --doughnut-segment-color-4: rgb(148, 255, 82);
+  --doughnut-guideline-color: rgb(253, 215, 188);
+}
+
+.doughnut-container,
+.doughnut-container__doughnut {
+  display: flex;
+  border-radius: 2.5px;
+}
+
+.doughnut-container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  margin: 2rem auto 4rem auto;
+  background-color: var(--doughnut-container-bg-color);
+  min-height: 600px;
+  min-width: 600px;
+  box-shadow: 0.25rem 0.25rem 1rem rgb(0, 0, 0, 0.3);
+}
+
+.doughnut-container__heading {
+  display: block;
+  font-family: cantarell;
+  font-style: italic;
+  margin: 2rem auto 1rem auto;
+  text-align: center;
+  font-size: 1.75rem;
+  padding: 0.75rem;
+  color: var(--doughnut-color);
+  border: 1.5px;
+  border-style: dashed;
+  border-color: var(--doughnut-color);
+  border-radius: 2.5px;
+  width: 350px;
+  height: auto;
+}
+
+.doughnut-container__doughnut {
+  display: inline-block;
+  left: 50%;
+  right: 50%;
+  top: 50%;
+  bottom: 50%;
+  margin: auto;
+  height: 400px;
+  width: 400px;
+}
+
+.doughnut-container__loading-container {
+  position: relative;
+  height: 400px;
+  width: 400px;
+  display: flex;
+  border-radius: 50%;
+  bottom: 2rem;
+}
+
+.doughnut-container__loading-container__icon {
+  position: relative;
+  margin: auto;
+  height: 200px;
+  width: 200px;
+  border: solid 4.5px;
+  border-color: var(--doughnut-segment-color-2) var(--doughnut-segment-color-2)
+    var(--doughnut-container-bg-color) var(--doughnut-container-bg-color);
+  border-radius: 50%;
+
+  animation: icon-rotate 2s linear infinite,
+    icon-colorslide 4s ease-in-out infinite;
+}
+
+/* ? GENERAL SETTINGS FOR DOUGHUT SEGMENTS, INACTIVE OR ACTIVE*/
+.doughnut-container__doughnut__doughnut-segment__1--inactive,
+.doughnut-container__doughnut__doughnut-segment__2--inactive,
+.doughnut-container__doughnut__doughnut-segment__3--inactive,
+.doughnut-container__doughnut__doughnut-segment__4--inactive,
+.doughnut-container__doughnut__doughnut-segment__5--inactive,
+.doughnut-container__doughnut__doughnut-segment__6--inactive,
+.doughnut-container__doughnut__doughnut-segment__7--inactive,
+.doughnut-container__doughnut__doughnut-segment__8--inactive,
+.doughnut-container__doughnut__doughnut-segment__9--inactive,
+.doughnut-container__doughnut__doughnut-segment__10--inactive,
+.doughnut-container__doughnut__doughnut-segment__11--inactive,
+.doughnut-container__doughnut__doughnut-segment__12--inactive,
+.doughnut-container__doughnut__doughnut-segment__1--active,
+.doughnut-container__doughnut__doughnut-segment__2--active,
+.doughnut-container__doughnut__doughnut-segment__3--active,
+.doughnut-container__doughnut__doughnut-segment__4--active,
+.doughnut-container__doughnut__doughnut-segment__5--active,
+.doughnut-container__doughnut__doughnut-segment__6--active,
+.doughnut-container__doughnut__doughnut-segment__7--active,
+.doughnut-container__doughnut__doughnut-segment__8--active,
+.doughnut-container__doughnut__doughnut-segment__9--active,
+.doughnut-container__doughnut__doughnut-segment__10--active,
+.doughnut-container__doughnut__doughnut-segment__11--active,
+.doughnut-container__doughnut__doughnut-segment__12--active {
+  position: absolute;
+  height: 400px;
+  width: 400px;
+  border-radius: 100%;
+  transition-duration: 550ms;
+  clip-path: path("m 202 100 l 0 -130 l 109 28 l -63 114 Q 226 100 202 100");
+}
+
+/* ? INNACTIVE PIECES OF DOUGHNUT */
+.doughnut-container__doughnut__doughnut-segment__1--inactive,
+.doughnut-container__doughnut__doughnut-segment__2--inactive,
+.doughnut-container__doughnut__doughnut-segment__3--inactive,
+.doughnut-container__doughnut__doughnut-segment__4--inactive,
+.doughnut-container__doughnut__doughnut-segment__5--inactive,
+.doughnut-container__doughnut__doughnut-segment__6--inactive,
+.doughnut-container__doughnut__doughnut-segment__7--inactive,
+.doughnut-container__doughnut__doughnut-segment__8--inactive,
+.doughnut-container__doughnut__doughnut-segment__9--inactive,
+.doughnut-container__doughnut__doughnut-segment__10--inactive,
+.doughnut-container__doughnut__doughnut-segment__11--inactive,
+.doughnut-container__doughnut__doughnut-segment__12--inactive {
+  background: var(--doughnut-segment-color-1);
+}
+
+/* ? ACTIVE PIECES OF DOUGHNUT */
+.doughnut-container__doughnut__doughnut-segment__1--active,
+.doughnut-container__doughnut__doughnut-segment__2--active,
+.doughnut-container__doughnut__doughnut-segment__3--active,
+.doughnut-container__doughnut__doughnut-segment__4--active,
+.doughnut-container__doughnut__doughnut-segment__5--active,
+.doughnut-container__doughnut__doughnut-segment__6--active,
+.doughnut-container__doughnut__doughnut-segment__7--active,
+.doughnut-container__doughnut__doughnut-segment__8--active,
+.doughnut-container__doughnut__doughnut-segment__9--active,
+.doughnut-container__doughnut__doughnut-segment__10--active,
+.doughnut-container__doughnut__doughnut-segment__11--active,
+.doughnut-container__doughnut__doughnut-segment__12--active {
+  background: var(--doughnut-segment-color-3);
+}
+
+/* ? HOVER CHANGES OF DOUGHNUT PIECES */
+#doughnut-segment--active:hover {
+  background: var(--doughnut-segment-color-4);
+  scale: 1.3;
+  cursor: pointer;
+}
+
+#doughnut-segment--inactive:hover {
+  background: var(--doughnut-segment-color-2);
+  cursor: pointer;
+}
+
+/* ? ROTATING THE PIECES OF DOUGHNUT */
+.doughnut-container__doughnut__doughnut-segment__2--inactive,
+.doughnut-container__doughnut__doughnut-segment__2--active {
+  transform: rotate(30deg);
+}
+
+.doughnut-container__doughnut__doughnut-segment__3--inactive,
+.doughnut-container__doughnut__doughnut-segment__3--active {
+  transform: rotate(60deg);
+}
+.doughnut-container__doughnut__doughnut-segment__4--inactive,
+.doughnut-container__doughnut__doughnut-segment__4--active {
+  transform: rotate(90deg);
+}
+.doughnut-container__doughnut__doughnut-segment__5--inactive,
+.doughnut-container__doughnut__doughnut-segment__5--active {
+  transform: rotate(120deg);
+}
+
+.doughnut-container__doughnut__doughnut-segment__6--inactive,
+.doughnut-container__doughnut__doughnut-segment__6--active {
+  transform: rotate(150deg);
+}
+.doughnut-container__doughnut__doughnut-segment__7--inactive,
+.doughnut-container__doughnut__doughnut-segment__7--active {
+  transform: rotate(180deg);
+}
+
+.doughnut-container__doughnut__doughnut-segment__8--inactive,
+.doughnut-container__doughnut__doughnut-segment__8--active {
+  transform: rotate(210deg);
+}
+.doughnut-container__doughnut__doughnut-segment__9--inactive,
+.doughnut-container__doughnut__doughnut-segment__9--active {
+  transform: rotate(240deg);
+}
+.doughnut-container__doughnut__doughnut-segment__10--inactive,
+.doughnut-container__doughnut__doughnut-segment__10--active {
+  transform: rotate(270deg);
+}
+
+.doughnut-container__doughnut__doughnut-segment__11--inactive,
+.doughnut-container__doughnut__doughnut-segment__11--active {
+  transform: rotate(300deg);
+}
+.doughnut-container__doughnut__doughnut-segment__12--inactive,
+.doughnut-container__doughnut__doughnut-segment__12--active {
+  transform: rotate(330deg);
+}
+
+@keyframes icon-rotate {
+  from {
+    rotate: 1deg;
+  }
+  to {
+    rotate: 360deg;
+  }
+}
+
+@keyframes icon-colorslide {
+  from {
+    border-color: var(--doughnut-segment-color-3)
+      var(--doughnut-segment-color-3) var(--doughnut-container-bg-color)
+      var(--doughnut-container-bg-color);
+  }
+  50% {
+    border-color: var(--doughnut-segment-color-4)
+      var(--doughnut-segment-color-4) var(--doughnut-container-bg-color)
+      var(--doughnut-container-bg-color);
+  }
+  to {
+    border-color: var(--doughnut-segment-color-3)
+      var(--doughnut-segment-color-3) var(--doughnut-container-bg-color)
+      var(--doughnut-container-bg-color);
+  }
+}
+
+/* ---- ---- ---- ---- */
+
+/* .doughnut-container_doughnut_guide-line--1,
+.doughnut-container__doughnut__guide-line__2,
+.doughnut-container__doughnut__guide-line__3,
+.doughnut-container__doughnut__guide-line__4,
+.doughnut-container__doughnut__guide-line__5,
+.doughnut-container__doughnut__guide-line__6 {
+  position: absolute;
+  left: 49%;
+  top: 0;
+  background-color: var(--doughnut-container-bg-color);
+  height: 400px;
+  width: 2%;
+}
+
+.doughnut-container__doughnut__guide-line__2 {
+  transform: rotate(30deg);
+}
+
+.doughnut-container__doughnut__guide-line__3 {
+  transform: rotate(60deg);
+}
+
+.doughnut-container__doughnut__guide-line__4 {
+  transform: rotate(90deg);
+}
+
+.doughnut-container__doughnut__guide-line__5 {
+  transform: rotate(120deg);
+}
+
+.doughnut-container__doughnut__guide-line__6 {
+  transform: rotate(150deg);
+} */

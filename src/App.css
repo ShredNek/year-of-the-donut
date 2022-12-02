@@ -1,0 +1,64 @@
+@font-face {
+  font-family: cantarell;
+  src: url("./assets/fonts/Cantarell-Regular-webfont.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: cantarell;
+  src: url("./assets/fonts/Cantarell-Bold-webfont.woff") format("woff");
+  font-weight: bold;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: cantarell;
+  src: url("./assets/fonts/Cantarell-Oblique-webfont.woff") format("woff");
+  font-weight: normal;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: cantarell;
+  src: url("./assets/fonts/Cantarell-BoldOblique-webfont.woff") format("woff");
+  font-weight: bold;
+  font-style: italic;
+}
+
+:root {
+  --main-app-bg-color-1: rgb(196, 227, 253);
+  --main-app-bg-color-2: rgb(221, 252, 219);
+  --main-app-text-color-1: rgb(68, 83, 216);
+  --main-app-text-color-2: rgb(42, 205, 85);
+}
+
+main {
+  display: flex;
+  flex-direction: row;
+  min-width: 700px;
+}
+
+.app-background,
+.app-column {
+  min-height: 100vh;
+  background-color: var(--main-app-bg-color-1);
+}
+
+.app-background {
+  display: flex;
+  overflow: auto;
+  flex-direction: column;
+  min-width: 300px;
+  width: 100%;
+  padding: auto 3rem;
+}
+
+h1 {
+  font-family: cantarell;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 4.5rem;
+  color: var(--main-app-text-color-1);
+  margin: 2.5rem auto 0 auto;
+}

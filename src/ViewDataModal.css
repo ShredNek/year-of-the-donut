@@ -1,0 +1,161 @@
+:root {
+  --view-modal-transition-time-1: 750ms;
+  --view-modal-transition-time-2: 500ms;
+  --danger-color: rgb(244, 79, 79);
+}
+
+button {
+  background: none;
+  color: inherit;
+  border: 0;
+  font: inherit;
+  cursor: pointer;
+}
+
+p {
+  margin: auto;
+}
+
+.view-modal__interface--true,
+.view-modal__interface--false {
+  font-family: cantarell;
+  font-weight: bold;
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  width: 500px;
+  top: 50%;
+  left: 50%;
+  translate: -50% -50%;
+  background-color: var(--main-app-bg-color-2);
+  color: black;
+  border-radius: 3px;
+  z-index: 200;
+  padding: 2rem;
+  transition: all var(--view-modal-transition-time-1) ease-in-out;
+}
+
+.view-modal__overlay--true,
+.view-modal__overlay--false {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0);
+  opacity: 60%;
+  z-index: 100;
+  transition: all var(--view-modal-transition-time-2) ease;
+}
+
+.view-modal__interface--false {
+  top: -50%;
+}
+
+.view-modal__overlay--false {
+  opacity: 0%;
+  z-index: -1;
+}
+
+.view-modal__close-button {
+  position: absolute;
+  width: 2rem;
+  height: 2rem;
+  right: 1rem;
+  top: 1rem;
+}
+
+.view-modal__title {
+  margin: 0rem auto 2rem auto;
+  font-size: 2.5rem;
+  text-align: center;
+  max-width: 90%;
+  color: var(--main-app-text-color-2);
+}
+
+.view-modal__form-details {
+  display: flex;
+  flex-direction: column;
+  background-color: rgb(232, 232, 232);
+  padding: 2rem;
+  border-radius: 3px;
+}
+
+.view-modal__form-details__form-heading {
+  margin: 1rem auto 1rem auto;
+  width: 80%;
+  font-style: italic;
+}
+
+.view-modal__form-details__textarea--shown-false,
+.view-modal__form-details__textarea--shown-true {
+  font-family: cantarell;
+  font-size: 1rem;
+  font-weight: bold;
+  margin: auto;
+  background-color: var(--doughnut-container-bg-color);
+  width: 90%;
+  min-height: 6rem;
+  max-height: 12rem;
+  resize: vertical;
+  border: 0;
+  border-radius: 3px;
+  box-sizing: border-box;
+}
+
+.view-modal__form-details__userinfo--hidden-true,
+.view-modal__form-details__userinfo--hidden-false {
+  background-color: var(--doughnut-container-bg-color);
+  margin: auto;
+  width: 90%;
+  height: 6rem;
+  border: 2px;
+  border-style: solid;
+  border-color: var(--doughnut-container-bg-color);
+  border-radius: 3px;
+  overflow: scroll;
+  box-sizing: border-box;
+}
+.view-modal__form-details__textarea--shown-false,
+.view-modal__form-details__userinfo--hidden-true {
+  display: none;
+}
+
+.view-modal__button-row--edit-engaged-false,
+.view-modal__button-row--save-engaged-false,
+.view-modal__button-row--edit-engaged-true,
+.view-modal__button-row--save-engaged-true {
+  display: flex;
+  flex-direction: row;
+  margin-top: 3rem;
+  text-align: center;
+}
+
+.view-modal__button-row--edit-engaged-true,
+.view-modal__button-row--save-engaged-false {
+  display: none;
+}
+
+.view-modal__button-row__edit-button--false,
+.view-modal__button-row__edit-button--true,
+.view-modal__button-row__delete-button {
+  display: inline-block;
+  margin: auto;
+  border-radius: 3px;
+  padding: 1.25rem;
+  width: 11rem;
+  color: var(--doughnut-container-bg-color);
+}
+
+.view-modal__button-row__edit-button--false {
+  background-color: var(--main-app-text-color-2);
+}
+
+.view-modal__button-row__edit-button--true {
+  background-color: var(--doughnut-container-bg-color);
+  color: var(--main-app-text-color-2);
+}
+
+.view-modal__button-row__delete-button {
+  background-color: var(--danger-color);
+}
