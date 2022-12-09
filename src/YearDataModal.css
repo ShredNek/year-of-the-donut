@@ -1,0 +1,110 @@
+:root {
+  --year-data-modal-transition-time-1: 750ms;
+  --year-data-modal-transition-time-2: 500ms;
+}
+
+button {
+  background: none;
+  color: inherit;
+  border: 0;
+  font: inherit;
+  cursor: pointer;
+}
+
+.year-data-modal__interface--true,
+.year-data-modal__interface--false {
+  font-family: cantarell;
+  font-weight: bold;
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  width: 500px;
+  top: 50%;
+  left: 50%;
+  translate: -50% -50%;
+  background-color: var(--doughnut-year-review-bg-1);
+  color: black;
+  border-radius: 3px;
+  z-index: 200;
+  padding: 2rem;
+  transition: all var(--year-data-modal-transition-time-1) ease-in-out;
+}
+
+.year-data-modal__overlay--true,
+.year-data-modal__overlay--false {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0);
+  opacity: 60%;
+  z-index: 100;
+  transition: all var(--year-data-modal-transition-time-2) ease;
+}
+
+.year-data-modal__interface--false {
+  top: -50%;
+}
+
+.year-data-modal__overlay--false {
+  opacity: 0%;
+  z-index: -1;
+}
+
+.year-data-modal__close-button {
+  position: absolute;
+  width: 2rem;
+  height: 2rem;
+  right: 1rem;
+  top: 1rem;
+}
+
+.year-data-modal__title {
+  margin: 0rem auto 2rem auto;
+  font-size: 2.5rem;
+  text-align: center;
+  max-width: 90%;
+  color: var(--doughnut-container-bg-color);
+}
+
+.year-data-modal__month-details {
+  display: flex;
+  flex-direction: column;
+  margin: 0rem;
+  background-color: rgb(232, 232, 232);
+  padding: 2rem;
+  border-radius: 3px;
+  max-height: 28rem;
+  overflow: scroll;
+}
+
+.year-data-modal__month-details p h3 {
+  color: black;
+}
+
+.year-data-modal__month-details h3 {
+  font-size: 1.4rem;
+  margin: 0;
+}
+
+.year-data-modal__month-details p {
+  font-size: 0.9rem;
+  font-weight: normal;
+  margin: 1rem 0 2rem;
+}
+
+.year-data-modal__download-button {
+  display: flex;
+  margin: 2rem auto 0 auto;
+  padding: 1.25rem;
+  border-radius: 3px;
+  background-color: var(--doughnut-container-bg-color);
+  color: var(--doughnut-year-review-bg-1);
+  transition: all var(--year-data-modal-transition-time-2) ease-in-out;
+}
+
+.year-data-modal__download-button:hover {
+  background-color: black;
+  color: var(--doughnut-container-bg-color);
+}

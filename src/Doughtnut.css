@@ -5,7 +5,10 @@
   --doughnut-segment-color-2: rgb(133, 75, 207);
   --doughnut-segment-color-3: rgb(82, 203, 255);
   --doughnut-segment-color-4: rgb(148, 255, 82);
-  --doughnut-guideline-color: rgb(253, 215, 188);
+  --doughnut-guideline-color: rgb(249, 199, 164);
+  --doughnut-year-review-bg-1: rgb(233, 206, 97);
+  --doughnut-year-review-bg-2: rgb(255, 226, 94);
+  --box-shadow-default: 0.25rem 0.25rem 1rem rgb(0, 0, 0, 0.3);
 }
 
 .doughnut-container,
@@ -22,24 +25,43 @@
   background-color: var(--doughnut-container-bg-color);
   min-height: 600px;
   min-width: 600px;
-  box-shadow: 0.25rem 0.25rem 1rem rgb(0, 0, 0, 0.3);
+  box-shadow: var(--box-shadow-default);
 }
 
-.doughnut-container__heading {
+.doughnut-container__heading--inactive,
+.doughnut-container__heading--active {
   display: block;
   font-family: cantarell;
   font-style: italic;
-  margin: 2rem auto 1rem auto;
+  margin: 2rem auto 0rem auto;
   text-align: center;
   font-size: 1.75rem;
   padding: 0.75rem;
+  width: 400px;
+  height: auto;
+  border: 2.5px;
+  border-radius: 2.5px;
+  box-sizing: border-box;
+  transition: background-color 450ms ease-in-out;
+}
+
+.doughnut-container__heading--inactive {
   color: var(--doughnut-color);
-  border: 1.5px;
   border-style: dashed;
   border-color: var(--doughnut-color);
-  border-radius: 2.5px;
-  width: 350px;
-  height: auto;
+}
+
+.doughnut-container__heading--active {
+  background-color: var(--doughnut-year-review-bg-1);
+  color: var(--doughnut-container-bg-color);
+  border-style: solid;
+  border-color: var(--doughnut-container-bg-color);
+}
+
+.doughnut-container__heading--active:hover {
+  background-color: var(--doughnut-year-review-bg-2);
+  transform: scale(1.1, 1.1);
+  box-shadow: var(--box-shadow-default);
 }
 
 .doughnut-container__doughnut {

@@ -84,14 +84,17 @@ button {
 
 .create-modal__form-details__textarea {
   font-family: cantarell;
-  background-color: var(--doughnut-container-bg-color);
+  font-size: 1rem;
+  font-weight: bold;
   margin: auto;
+  background-color: var(--doughnut-container-bg-color);
   width: 90%;
   min-height: 6rem;
   max-height: 12rem;
   resize: vertical;
   border: 0;
   border-radius: 3px;
+  box-sizing: border-box;
 }
 
 .create-modal__submit-button {

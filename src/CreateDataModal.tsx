@@ -1,9 +1,9 @@
-import React, { useRef, useState } from "react";
+import React, { useRef } from "react";
 import ReactDom from "react-dom";
 import "./CreateDataModal.css";
 import { TfiClose } from "react-icons/tfi";
 import axios from "axios";
-import { getDoughnutData } from "./Doughnut";
+import { getDoughnutData, MONTH_NAME_KEY } from "./Doughnut";
 
 interface Modal {
   isOpen: boolean;
@@ -22,27 +22,32 @@ const CreateDataPortal: React.FC<Modal> = ({
   isOpen,
   onClose,
 }: Modal) => {
-  // TODO - FIND APPROPRIATE TYPE FOR THIS!
-  const descriptionRef: any = useRef<HTMLTextAreaElement>();
+  const descriptionRef = useRef<HTMLTextAreaElement>(null);
   let newDoughnutSegmentData = new DoughnutSegmentDataModel();
 
-  const onCloseAndDoNotSaveData = (e: any) => {
+  const onCloseAndDoNotSaveData = (e: React.MouseEvent) => {
     e.preventDefault();
+    onClose(e);
   };
 
-  const onCloseAndSaveData = async (e: any) => {
+  const onCloseAndSaveData = async (e: React.MouseEvent) => {
     e.preventDefault();
-    console.log("click");
-    newDoughnutSegmentData.description = descriptionRef.current.value;
+
+    newDoughnutSegmentData.description = descriptionRef.current!.value;
     newDoughnutSegmentData.childNumber = doughnutSegmentChildNumber;
-    if (descriptionRef.current?.value === "" || undefined) {
+
+    if (descriptionRef.current!.value === "" || undefined) {
       return window.alert("Looks like didn't input any data! Try again");
     }
-    console.log("did we get here?");
+    console.log(
+      `Apparently we have: ${Object.entries(newDoughnutSegmentData)}`
+    );
 
     axios
       .post("http://localhost:3001", newDoughnutSegmentData)
-      .then((res) => console.log(res));
+      .then((res) => console.log(res))
+      .then(() => console.log("we're here now"))
+      .catch((err) => console.log(err));
     await getDoughnutData();
     console.log("or here?");
     onClose(e);
@@ -60,10 +65,12 @@ const CreateDataPortal: React.FC<Modal> = ({
         >
           <TfiClose />
         </button>
-        <h2 className="create-modal__title">Fill in the hour!</h2>
+        <h2 className="create-modal__title">
+          {MONTH_NAME_KEY[doughnutSegmentChildNumber]}
+        </h2>
         <form className="create-modal__form-details">
           <h3 className="create-modal__form-details__form-heading">
-            So, what did we do on this hour?
+            So, what did we do on this month?
           </h3>
           <textarea
             required

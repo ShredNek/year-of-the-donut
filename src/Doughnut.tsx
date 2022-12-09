@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./Doughtnut.css";
+import YearDataModal from "./YearDataModal";
 import DoughnutSegment from "./DoughnutSegment";
 import axios from "axios";
 
@@ -9,16 +10,35 @@ interface DoughnutSegmentData {
   childNumber: number;
 }
 
+export const MONTH_NAME_KEY = {
+  1: "January",
+  2: "Feburary",
+  3: "March",
+  4: "April",
+  5: "May",
+  6: "June",
+  7: "July",
+  8: "August",
+  9: "September",
+  10: "October",
+  11: "November",
+  12: "December",
+  13: "ERROR: MONTHNAME NOT FOUND",
+};
+
 export async function getDoughnutData() {
   return await axios.get("http://localhost:3001");
 }
 
 const Doughnut: React.FC = () => {
-  // console.log("re-render time!");
-  const [doughnutSegmentData, setDoughnutSegmentData] = useState([{}]);
+  const [doughnutSegmentData, setDoughnutSegmentData] =
+    useState<DoughnutSegmentData[]>();
   const [uiHeadingMessage, setUiHeadingMessage] = useState("Default Text");
+  const [isActive, setIsActive] = useState("");
+  const [isOpen, setIsOpen] = useState(false);
+  const [wholeYearOfData, setWholeYearOfData] = useState([{}]);
 
-  function doughnutDataAlgorythm(d: any) {
+  function doughnutDataAlgorythmAndUiSetter(d: DoughnutSegmentData[]) {
     const maxChildren = 12;
     if (d.length !== maxChildren) {
       let sortedData = [...d];
@@ -52,19 +72,27 @@ const Doughnut: React.FC = () => {
           continue;
         }
       }
+      setIsActive("inactive");
+      setWholeYearOfData([{ hmmm: "how did you get in here?" }]);
+      setUiHeadingMessage("Fill in your year!");
       return sortedData;
     }
+    setIsActive("active");
+    setWholeYearOfData(
+      d.sort(({ childNumber: a }, { childNumber: b }) => a - b)
+    );
+    setUiHeadingMessage("Check out your year!");
     return d;
   }
 
   const newDataCall = async () => {
     console.log("new fetch of data...");
-    setDoughnutSegmentData([{}]);
+    setIsActive("inactive");
     setUiHeadingMessage("Loading your data");
     let response = await getDoughnutData();
     setTimeout(() => {
       let processedData = [...response.data];
-      let endResult = doughnutDataAlgorythm(processedData);
+      let endResult = doughnutDataAlgorythmAndUiSetter(processedData);
       setDoughnutSegmentData(endResult as any[]);
     }, 500);
   };
@@ -72,21 +100,26 @@ const Doughnut: React.FC = () => {
   useEffect(() => {
     const firstDataCall = async () => {
       console.log("first fetch of data...");
+      setIsActive("inactive");
       setUiHeadingMessage("Loading your data");
       let response = await getDoughnutData();
-      let processedData = [...response.data];
-      let endResult = doughnutDataAlgorythm(processedData);
       setTimeout(() => {
+        let processedData = [...response.data];
+        let endResult = doughnutDataAlgorythmAndUiSetter(processedData);
         setDoughnutSegmentData(endResult as any[]);
-        setUiHeadingMessage("Click the segments to edit!");
-      }, 2000);
+      }, 500);
     };
     firstDataCall();
   }, []);
 
   return (
     <div className="doughnut-container">
-      <h2 className="doughnut-container__heading">{uiHeadingMessage}</h2>
+      <button
+        className={`doughnut-container__heading--${isActive}`}
+        onClick={() => setIsOpen(true)}
+      >
+        {uiHeadingMessage}
+      </button>
       <div className="doughnut-container__doughnut">
         <div className="doughnut-container__doughnut__doughnut-hole"></div>
         <div id="Guidelines">
@@ -104,9 +137,8 @@ const Doughnut: React.FC = () => {
           <div className="doughnut-container_doughnut_guide-line--12"></div>
         </div>
         <div id="doughnutSegmentContainer">
-          {/*// TODO - ASSIGN PROPER TYPE TO SEGMENT */}
-          {doughnutSegmentData.length !== 1 ? (
-            doughnutSegmentData.map((segment: any) => (
+          {doughnutSegmentData?.length !== undefined ? (
+            doughnutSegmentData?.map((segment: DoughnutSegmentData) => (
               <DoughnutSegment
                 childNumber={segment.childNumber}
                 key={segment.childNumber}
@@ -127,6 +159,13 @@ const Doughnut: React.FC = () => {
           )}
         </div>
       </div>
+      <YearDataModal
+        isOpen={isOpen}
+        onClose={() => {
+          setIsOpen(false);
+        }}
+        allData={wholeYearOfData}
+      ></YearDataModal>
     </div>
   );
 };

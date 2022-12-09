@@ -3,7 +3,7 @@ import ReactDom from "react-dom";
 import "./ViewDataModal.css";
 import { TfiClose } from "react-icons/tfi";
 import axios from "axios";
-import { getDoughnutData } from "./Doughnut";
+import { getDoughnutData, MONTH_NAME_KEY } from "./Doughnut";
 
 interface PortalChildren {
   isOpen: boolean;
@@ -25,14 +25,17 @@ const CreateViewPortal: React.FC<PortalChildren> = ({
   doughnutSegmentDescription,
 }: PortalChildren) => {
   const [editButtonEngaged, setEditButtonEngaged] = useState(false);
-  // TODO - FIND APPROPRIATE TYPE FOR THIS!
-  const descriptionRef: any = useRef<HTMLTextAreaElement>();
+  const descriptionRef = useRef<HTMLTextAreaElement>(null);
   let newDoughnutSegmentData = new DoughnutSegmentDataModel();
 
-  const onCloseAndDoNotEditData = (e: any) => {
+  const onCloseAndDoNotEditData = (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
+    e.preventDefault();
     setTimeout(() => {
       if (editButtonEngaged == true) setEditButtonEngaged(false);
     }, 750);
+    onClose(e);
   };
 
   const onEditButtonClick = () => {
@@ -40,24 +43,34 @@ const CreateViewPortal: React.FC<PortalChildren> = ({
     if (editButtonEngaged == false) setEditButtonEngaged(true);
   };
 
-  const onCloseAndSaveData = async (e: any, cN: number) => {
-    newDoughnutSegmentData.description = descriptionRef.current.value;
+  const onCloseAndSaveData = async (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
+    newDoughnutSegmentData.description = descriptionRef.current!.value;
     newDoughnutSegmentData.childNumber = doughnutSegmentChildNumber;
     if (descriptionRef.current?.value === "" || undefined) {
-      return window.alert("Looks like didn't input any data! Try again");
+      return window.alert("Looks like you didn't input any data! Try again");
     }
 
     axios
-      .put(`http://localhost:3001/edit/${cN}`, newDoughnutSegmentData)
+      .put(
+        `http://localhost:3001/edit/${doughnutSegmentChildNumber}`,
+        newDoughnutSegmentData
+      )
       .then((res) => console.log(res));
-    setTimeout(() => onEditButtonClick(), 2000);
+    setTimeout(() => onEditButtonClick(), 750);
     await getDoughnutData();
     onClose(e);
   };
 
-  const onDeleteButtonClick = async (e: any, cN: number) => {
+  const onDeleteButtonClick = async (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
+    e.preventDefault();
+    newDoughnutSegmentData.childNumber = doughnutSegmentChildNumber;
+
     axios
-      .delete(`http://localhost:3001/delete/${cN}`)
+      .delete(`http://localhost:3001/delete/${doughnutSegmentChildNumber}`)
       .then((res) => console.log(res));
     await getDoughnutData();
     onClose(e);
@@ -74,10 +87,12 @@ const CreateViewPortal: React.FC<PortalChildren> = ({
         >
           <TfiClose />
         </button>
-        <h2 className="view-modal__title">Let's have a look...</h2>
+        <h2 className="view-modal__title">
+          {MONTH_NAME_KEY[doughnutSegmentChildNumber]}
+        </h2>
         <form className="view-modal__form-details">
           <h3 className="view-modal__form-details__form-heading">
-            Let's have a look at your hour...
+            Let's have a look at your month...
           </h3>
           <div
             className={`view-modal__form-details__userinfo--hidden-${editButtonEngaged}`}
@@ -101,9 +116,7 @@ const CreateViewPortal: React.FC<PortalChildren> = ({
           </button>
           <button
             className="view-modal__button-row__delete-button"
-            onClick={() =>
-              onDeleteButtonClick(event?.target, doughnutSegmentChildNumber)
-            }
+            onClick={onDeleteButtonClick}
           >
             Delete
           </button>
@@ -113,9 +126,7 @@ const CreateViewPortal: React.FC<PortalChildren> = ({
         >
           <button
             className={`view-modal__button-row__edit-button--${editButtonEngaged}`}
-            onClick={() =>
-              onCloseAndSaveData(event?.target, doughnutSegmentChildNumber)
-            }
+            onClick={onCloseAndSaveData}
           >
             Save Changes
           </button>
