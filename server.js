@@ -8,7 +8,7 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-mongoose.set("debug", true);
+// mongoose.set("debug", true);
 
 export const MONGO_DB_URI =
   "mongodb+srv://new-user_1:user1@cluster0.mklub.mongodb.net/time-count";

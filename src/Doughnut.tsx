@@ -8,6 +8,7 @@ interface DoughnutSegmentData {
   segmentState: string;
   description: string;
   childNumber: number;
+  _id: string;
 }
 
 export const MONTH_NAME_KEY = {
@@ -26,17 +27,18 @@ export const MONTH_NAME_KEY = {
   13: "ERROR: MONTHNAME NOT FOUND",
 };
 
-export async function getDoughnutData() {
-  return await axios.get("http://localhost:3001");
-}
-
 const Doughnut: React.FC = () => {
   const [doughnutSegmentData, setDoughnutSegmentData] =
     useState<DoughnutSegmentData[]>();
-  const [uiHeadingMessage, setUiHeadingMessage] = useState("Default Text");
+  const [uiHeadingMessage, setUiHeadingMessage] = useState("");
   const [isActive, setIsActive] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const [wholeYearOfData, setWholeYearOfData] = useState([{}]);
+
+  async function getDoughnutData() {
+    console.log("Sending req - let's get this bread");
+    return axios.get("http://localhost:3001");
+  }
 
   function doughnutDataAlgorythmAndUiSetter(d: DoughnutSegmentData[]) {
     const maxChildren = 12;
@@ -47,22 +49,21 @@ const Doughnut: React.FC = () => {
       for (let i = 1; i < maxChildren + 1; i++) {
         sortedData.sort(({ childNumber: a }, { childNumber: b }) => a - b);
 
+        const innactiveSegment = {
+          segmentState: "inactive",
+          description: "",
+          childNumber: i,
+          _id: `inactive-segment-number${i}`,
+        };
+
         if (sortedData[i - 1] === undefined) {
-          sortedData.push({
-            segmentState: "inactive",
-            description: "",
-            childNumber: i,
-          });
+          sortedData.push(innactiveSegment);
           sortedData.sort(({ childNumber: a }, { childNumber: b }) => a - b);
           continue;
         }
 
         if (sortedData[i - 1].childNumber !== i) {
-          sortedData.push({
-            segmentState: "inactive",
-            description: "",
-            childNumber: i,
-          });
+          sortedData.push(innactiveSegment);
           sortedData.sort(({ childNumber: a }, { childNumber: b }) => a - b);
           continue;
         }
@@ -86,25 +87,24 @@ const Doughnut: React.FC = () => {
   }
 
   const newDataCall = async () => {
-    console.log("new fetch of data...");
-    setIsActive("inactive");
     setUiHeadingMessage("Loading your data");
-    let response = await getDoughnutData();
-    setTimeout(() => {
-      let processedData = [...response.data];
+    setDoughnutSegmentData(undefined);
+    setTimeout(async () => {
+      let response = await getDoughnutData().catch((e) => console.log(e));
+      let processedData = [...response?.data];
       let endResult = doughnutDataAlgorythmAndUiSetter(processedData);
       setDoughnutSegmentData(endResult as any[]);
+      console.log("Response received");
     }, 500);
   };
 
   useEffect(() => {
     const firstDataCall = async () => {
-      console.log("first fetch of data...");
       setIsActive("inactive");
       setUiHeadingMessage("Loading your data");
       let response = await getDoughnutData();
       setTimeout(() => {
-        let processedData = [...response.data];
+        let processedData = [...response?.data];
         let endResult = doughnutDataAlgorythmAndUiSetter(processedData);
         setDoughnutSegmentData(endResult as any[]);
       }, 500);
@@ -137,11 +137,11 @@ const Doughnut: React.FC = () => {
           <div className="doughnut-container_doughnut_guide-line--12"></div>
         </div>
         <div id="doughnutSegmentContainer">
-          {doughnutSegmentData?.length !== undefined ? (
+          {doughnutSegmentData !== undefined ? (
             doughnutSegmentData?.map((segment: DoughnutSegmentData) => (
               <DoughnutSegment
                 childNumber={segment.childNumber}
-                key={segment.childNumber}
+                key={segment._id}
                 status={segment.segmentState}
                 description={segment.description}
                 closeSegmentFunction={() => {

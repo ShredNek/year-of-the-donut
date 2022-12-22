@@ -54,11 +54,12 @@ main {
   padding: auto 3rem;
 }
 
-h1 {
+.app-heading {
   font-family: cantarell;
   font-style: normal;
   font-weight: normal;
   font-size: 4.5rem;
   color: var(--main-app-text-color-1);
   margin: 2.5rem auto 0 auto;
+  min-height: 6rem;
 }

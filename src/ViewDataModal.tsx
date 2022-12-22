@@ -3,7 +3,7 @@ import ReactDom from "react-dom";
 import "./ViewDataModal.css";
 import { TfiClose } from "react-icons/tfi";
 import axios from "axios";
-import { getDoughnutData, MONTH_NAME_KEY } from "./Doughnut";
+import { MONTH_NAME_KEY } from "./Doughnut";
 
 interface PortalChildren {
   isOpen: boolean;
@@ -46,6 +46,8 @@ const CreateViewPortal: React.FC<PortalChildren> = ({
   const onCloseAndSaveData = async (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
+    // e.preventDefault();
+    location.reload();
     newDoughnutSegmentData.description = descriptionRef.current!.value;
     newDoughnutSegmentData.childNumber = doughnutSegmentChildNumber;
     if (descriptionRef.current?.value === "" || undefined) {
@@ -59,20 +61,19 @@ const CreateViewPortal: React.FC<PortalChildren> = ({
       )
       .then((res) => console.log(res));
     setTimeout(() => onEditButtonClick(), 750);
-    await getDoughnutData();
     onClose(e);
   };
 
   const onDeleteButtonClick = async (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
-    e.preventDefault();
+    // e.preventDefault();
+    location.reload();
     newDoughnutSegmentData.childNumber = doughnutSegmentChildNumber;
 
     axios
       .delete(`http://localhost:3001/delete/${doughnutSegmentChildNumber}`)
       .then((res) => console.log(res));
-    await getDoughnutData();
     onClose(e);
   };
 

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import CreateDataModal from "./CreateDataModal";
 import ViewDataModal from "./ViewDataModal";
 import "./Doughnut";
+import { MONTH_NAME_KEY } from "./Doughnut";
 
 interface ChildNumberAndStatus {
   childNumber: number;
@@ -34,6 +35,15 @@ const DoughnutSegment: React.FC<ChildNumberAndStatus> = ({
 
   return (
     <div>
+      <div
+        className={`doughnut-container__doughnut__doughnut-segment__heading-${childNumber}`}
+      >
+        <h6
+          className={`doughnut-container__doughnut__doughnut-segment__heading--h6-${childNumber}`}
+        >
+          {MONTH_NAME_KEY[childNumber]}
+        </h6>
+      </div>
       <div
         onClick={openSegmentClickEvent}
         className={`doughnut-container__doughnut__doughnut-segment__${childNumber}--${status}`}

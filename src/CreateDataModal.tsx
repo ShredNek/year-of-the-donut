@@ -3,7 +3,7 @@ import ReactDom from "react-dom";
 import "./CreateDataModal.css";
 import { TfiClose } from "react-icons/tfi";
 import axios from "axios";
-import { getDoughnutData, MONTH_NAME_KEY } from "./Doughnut";
+import { MONTH_NAME_KEY } from "./Doughnut";
 
 interface Modal {
   isOpen: boolean;
@@ -31,7 +31,8 @@ const CreateDataPortal: React.FC<Modal> = ({
   };
 
   const onCloseAndSaveData = async (e: React.MouseEvent) => {
-    e.preventDefault();
+    // e.preventDefault();
+    location.reload();
 
     newDoughnutSegmentData.description = descriptionRef.current!.value;
     newDoughnutSegmentData.childNumber = doughnutSegmentChildNumber;
@@ -45,11 +46,8 @@ const CreateDataPortal: React.FC<Modal> = ({
 
     axios
       .post("http://localhost:3001", newDoughnutSegmentData)
-      .then((res) => console.log(res))
-      .then(() => console.log("we're here now"))
-      .catch((err) => console.log(err));
-    await getDoughnutData();
-    console.log("or here?");
+      .catch((err) => console.log(err))
+      .then((res) => console.log(res));
     onClose(e);
   };
 

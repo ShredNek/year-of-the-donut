@@ -7,7 +7,7 @@ const App: React.FC = () => {
     <main>
       <div className="app-column"></div>
       <div className="app-background">
-        <h1>TimeCount</h1>
+        <h1 className="app-heading">Year of the Donut</h1>
         <Doughnut></Doughnut>
       </div>
       <div className="app-column"></div>
