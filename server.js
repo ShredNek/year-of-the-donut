@@ -1,6 +1,8 @@
 import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
+import dotenv from "dotenv";
+dotenv.config();
 
 const app = express();
 
@@ -9,9 +11,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 // mongoose.set("debug", true);
-
-export const MONGO_DB_URI =
-  "mongodb+srv://new-user_1:user1@cluster0.mklub.mongodb.net/time-count";
+mongoose.set("strictQuery", true);
 
 const doughnutSegmentDataSchema = mongoose.Schema({
   segmentState: String,
@@ -23,25 +23,30 @@ const SegmentData = mongoose.model("SegmentData", doughnutSegmentDataSchema);
 
 async function run() {
   try {
-    await mongoose.connect(MONGO_DB_URI).then(console.log("we in de mongodb"));
+    await mongoose
+      .connect(process.env.MONGO_DB_URI)
+      .then(console.log("we in de mongodb"));
 
-    app.get("/", (req, res) => {
+    app.get("/segments", (req, res) => {
+      console.log("Getting data");
       SegmentData.find().then((items) => {
         res.json(items);
       });
     });
 
-    app.post("/", (req, res) => {
+    app.post("/segments", (req, res) => {
+      console.log("Posting");
       SegmentData.create({
         segmentState: req.body.segmentState,
         description: req.body.description,
         childNumber: req.body.childNumber,
       })
         .then((doc) => console.log(doc))
-        .catch((err) => console.log(err));
+        .catch((err) => console.error(err));
     });
 
     app.put("/edit/:childNumber", (req, res) => {
+      console.log("Editing");
       SegmentData.findOneAndUpdate(
         { childNumber: req.params.childNumber },
         {
@@ -55,17 +60,18 @@ async function run() {
     });
 
     app.delete("/delete/:childNumber", (req, res) => {
+      console.log("Deleting");
       console.log(req.params.childNumber);
       SegmentData.findOneAndDelete({ childNumber: req.params.childNumber })
         .then((doc) => console.log(doc))
         .catch((err) => console.log(err));
     });
 
-    app.listen(3001, function () {
-      console.log("express is on 3001");
+    app.listen(process.env.PORT || 3001, () => {
+      console.log(`express is on port ${process.env.PORT}`);
     });
   } catch (err) {
-    console.log(err);
+    console.log("MONGODB Error:" + err);
   }
 }
 

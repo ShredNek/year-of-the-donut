@@ -1,9 +1,9 @@
 import React, { useRef, useState } from "react";
 import ReactDom from "react-dom";
-import "./ViewDataModal.css";
+import "./styles/ViewDataModal.css";
 import { TfiClose } from "react-icons/tfi";
 import axios from "axios";
-import { MONTH_NAME_KEY } from "./Doughnut";
+import { MONTH_NAME_KEY, PROXY } from "./Doughnut";
 
 interface PortalChildren {
   isOpen: boolean;
@@ -47,7 +47,7 @@ const CreateViewPortal: React.FC<PortalChildren> = ({
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
     // e.preventDefault();
-    location.reload();
+    // location.reload();
     newDoughnutSegmentData.description = descriptionRef.current!.value;
     newDoughnutSegmentData.childNumber = doughnutSegmentChildNumber;
     if (descriptionRef.current?.value === "" || undefined) {
@@ -56,7 +56,7 @@ const CreateViewPortal: React.FC<PortalChildren> = ({
 
     axios
       .put(
-        `http://localhost:3001/edit/${doughnutSegmentChildNumber}`,
+        `${PROXY}/edit/${doughnutSegmentChildNumber}`,
         newDoughnutSegmentData
       )
       .then((res) => console.log(res));
@@ -68,11 +68,11 @@ const CreateViewPortal: React.FC<PortalChildren> = ({
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
     // e.preventDefault();
-    location.reload();
+    // location.reload();
     newDoughnutSegmentData.childNumber = doughnutSegmentChildNumber;
 
     axios
-      .delete(`http://localhost:3001/delete/${doughnutSegmentChildNumber}`)
+      .delete(`${PROXY}/delete/${doughnutSegmentChildNumber}`)
       .then((res) => console.log(res));
     onClose(e);
   };

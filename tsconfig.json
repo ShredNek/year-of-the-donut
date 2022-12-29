@@ -17,8 +17,7 @@
     "jsx": "react-jsx",
     "paths": {
       "@/*": ["./src/*"]
-    },
-    "watch": true
+    }
   },
   "include": ["src/**/*.ts/*.tsx/*.css"],
   "exclude": ["../js"],

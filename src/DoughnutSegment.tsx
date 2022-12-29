@@ -5,6 +5,7 @@ import "./Doughnut";
 import { MONTH_NAME_KEY } from "./Doughnut";
 
 interface ChildNumberAndStatus {
+  key: string;
   childNumber: number;
   status: string;
   description: string;

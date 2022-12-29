@@ -1,6 +1,6 @@
-import React, { useRef, useState } from "react";
+import React from "react";
 import ReactDom from "react-dom";
-import "./YearDataModal.css";
+import "./styles/YearDataModal.css";
 import { TfiClose } from "react-icons/tfi";
 import { MONTH_NAME_KEY } from "./Doughnut";
 import { createYearDataPdf } from "./makeYearDataPdf";
@@ -8,13 +8,14 @@ import { createYearDataPdf } from "./makeYearDataPdf";
 interface PortalChildren {
   isOpen: boolean;
   onClose: React.MouseEventHandler<HTMLButtonElement>;
-  allData: any;
+  allData: DoughnutSegmentDataModel[];
 }
 
 class DoughnutSegmentDataModel {
   segmentState = "active";
   description: string;
   childNumber: number;
+  _id: string;
 }
 
 const CreateViewPortal: React.FC<PortalChildren> = ({
@@ -22,7 +23,9 @@ const CreateViewPortal: React.FC<PortalChildren> = ({
   onClose,
   allData,
 }: PortalChildren) => {
-  const onCloseAndDoNotEditData = (e: any) => {
+  const onCloseAndDoNotEditData = (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
     onClose(e);
   };
 
@@ -42,8 +45,8 @@ const CreateViewPortal: React.FC<PortalChildren> = ({
         </h2>
         <div className="year-data-modal__month-details">
           {allData.length === 12
-            ? allData.map((i: any) => (
-                <div>
+            ? allData.map((i: DoughnutSegmentDataModel) => (
+                <div key={i._id}>
                   <h3>{MONTH_NAME_KEY[i.childNumber]}</h3>
                   <p>{i.description}</p>
                 </div>

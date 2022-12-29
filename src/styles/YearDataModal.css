@@ -44,7 +44,7 @@ button {
 }
 
 .year-data-modal__interface--false {
-  top: -50%;
+  top: -100%;
 }
 
 .year-data-modal__overlay--false {

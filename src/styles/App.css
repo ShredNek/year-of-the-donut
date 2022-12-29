@@ -1,27 +1,27 @@
 @font-face {
   font-family: cantarell;
-  src: url("./assets/fonts/Cantarell-Regular-webfont.woff") format("woff");
+  src: url("../assets/fonts/Cantarell-Regular-webfont.woff") format("woff");
   font-weight: normal;
   font-style: normal;
 }
 
 @font-face {
   font-family: cantarell;
-  src: url("./assets/fonts/Cantarell-Bold-webfont.woff") format("woff");
+  src: url("../assets/fonts/Cantarell-Bold-webfont.woff") format("woff");
   font-weight: bold;
   font-style: normal;
 }
 
 @font-face {
   font-family: cantarell;
-  src: url("./assets/fonts/Cantarell-Oblique-webfont.woff") format("woff");
+  src: url("../assets/fonts/Cantarell-Oblique-webfont.woff") format("woff");
   font-weight: normal;
   font-style: italic;
 }
 
 @font-face {
   font-family: cantarell;
-  src: url("./assets/fonts/Cantarell-BoldOblique-webfont.woff") format("woff");
+  src: url("../assets/fonts/Cantarell-BoldOblique-webfont.woff") format("woff");
   font-weight: bold;
   font-style: italic;
 }

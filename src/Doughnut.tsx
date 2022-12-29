@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import "./Doughtnut.css";
+import "./styles/Doughtnut.css";
 import YearDataModal from "./YearDataModal";
 import DoughnutSegment from "./DoughnutSegment";
 import axios from "axios";
@@ -10,6 +10,8 @@ interface DoughnutSegmentData {
   childNumber: number;
   _id: string;
 }
+
+export const PROXY = "http://localhost:3001";
 
 export const MONTH_NAME_KEY = {
   1: "January",
@@ -37,8 +39,23 @@ const Doughnut: React.FC = () => {
 
   async function getDoughnutData() {
     console.log("Sending req - let's get this bread");
-    return axios.get("http://localhost:3001");
+    return await axios
+      .get(`${PROXY}/segments`)
+      // .get(`/segments`)
+      .catch((err) => console.error(err));
   }
+
+  // ? Automatically fetches data if it doesn't load on first try
+  // setInterval(() => {
+  //   let response = getDoughnutData()
+  //     .then(() => {
+  //       if (response === undefined) return (response.data = {});
+  //     })
+  //     .catch((e) => console.error(e));
+  //   let processedData = [...response.data];
+  //   let endResult = doughnutDataAlgorythmAndUiSetter(processedData);
+  //   setDoughnutSegmentData(endResult as any[]);
+  // }, 3000);
 
   function doughnutDataAlgorythmAndUiSetter(d: DoughnutSegmentData[]) {
     const maxChildren = 12;
@@ -90,7 +107,7 @@ const Doughnut: React.FC = () => {
     setUiHeadingMessage("Loading your data");
     setDoughnutSegmentData(undefined);
     setTimeout(async () => {
-      let response = await getDoughnutData().catch((e) => console.log(e));
+      let response = await getDoughnutData().catch((e) => console.error(e));
       let processedData = [...response?.data];
       let endResult = doughnutDataAlgorythmAndUiSetter(processedData);
       setDoughnutSegmentData(endResult as any[]);
@@ -122,20 +139,6 @@ const Doughnut: React.FC = () => {
       </button>
       <div className="doughnut-container__doughnut">
         <div className="doughnut-container__doughnut__doughnut-hole"></div>
-        <div id="Guidelines">
-          <div className="doughnut-container_doughnut_guide-line--1"></div>
-          <div className="doughnut-container_doughnut_guide-line--2"></div>
-          <div className="doughnut-container_doughnut_guide-line--3"></div>
-          <div className="doughnut-container_doughnut_guide-line--4"></div>
-          <div className="doughnut-container_doughnut_guide-line--5"></div>
-          <div className="doughnut-container_doughnut_guide-line--6"></div>
-          <div className="doughnut-container_doughnut_guide-line--7"></div>
-          <div className="doughnut-container_doughnut_guide-line--8"></div>
-          <div className="doughnut-container_doughnut_guide-line--9"></div>
-          <div className="doughnut-container_doughnut_guide-line--10"></div>
-          <div className="doughnut-container_doughnut_guide-line--11"></div>
-          <div className="doughnut-container_doughnut_guide-line--12"></div>
-        </div>
         <div id="doughnutSegmentContainer">
           {doughnutSegmentData !== undefined ? (
             doughnutSegmentData?.map((segment: DoughnutSegmentData) => (
@@ -164,7 +167,7 @@ const Doughnut: React.FC = () => {
         onClose={() => {
           setIsOpen(false);
         }}
-        allData={wholeYearOfData}
+        allData={wholeYearOfData as []}
       ></YearDataModal>
     </div>
   );
