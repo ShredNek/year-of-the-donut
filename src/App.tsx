@@ -5,12 +5,10 @@ import Doughnut from "./Doughnut";
 const App: React.FC = () => {
   return (
     <main>
-      <div className="app-column"></div>
-      <div className="app-background">
+      <div className="app-container">
         <h1 className="app-heading">Year of the Donut</h1>
         <Doughnut></Doughnut>
       </div>
-      <div className="app-column"></div>
     </main>
   );
 };

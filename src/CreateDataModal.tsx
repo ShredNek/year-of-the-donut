@@ -3,11 +3,12 @@ import ReactDom from "react-dom";
 import "./styles/CreateDataModal.css";
 import { TfiClose } from "react-icons/tfi";
 import axios from "axios";
-import { MONTH_NAME_KEY, PROXY } from "./Doughnut";
+import { MONTH_NAME_KEY, PROXY, AXOIS_TIMEOUT_DURATION } from "./Doughnut";
 
 interface Modal {
   isOpen: boolean;
-  onClose: React.MouseEventHandler;
+  onSaveClose: Function;
+  onNoSaveClose: Function;
   doughnutSegmentChildNumber: number;
 }
 
@@ -17,39 +18,54 @@ class DoughnutSegmentDataModel {
   childNumber: number;
 }
 
+export function containsCharacters(s: string | undefined) {
+  if (s === undefined) {
+    return console.error(`${s} is undefined`);
+  }
+  // ? This checks if the string has any characters, to
+  // ? check if there has been a misinput
+  return s!.search(/\S+/) >= 0;
+}
+
 const CreateDataPortal: React.FC<Modal> = ({
   doughnutSegmentChildNumber,
   isOpen,
-  onClose,
+  onSaveClose,
+  onNoSaveClose,
 }: Modal) => {
   const descriptionRef = useRef<HTMLTextAreaElement>(null);
   let newDoughnutSegmentData = new DoughnutSegmentDataModel();
 
   const onCloseAndDoNotSaveData = (e: React.MouseEvent) => {
     e.preventDefault();
-    onClose(e);
+    onNoSaveClose(e);
   };
 
-  const onCloseAndSaveData = async (e: React.MouseEvent) => {
-    // e.preventDefault();
-    // location.reload();
+  const onCloseAndSaveData = async (e?: React.MouseEvent) => {
+    if (containsCharacters(descriptionRef.current?.value)) {
+      newDoughnutSegmentData.description = descriptionRef.current!.value;
+      newDoughnutSegmentData.childNumber = doughnutSegmentChildNumber;
 
-    newDoughnutSegmentData.description = descriptionRef.current!.value;
-    newDoughnutSegmentData.childNumber = doughnutSegmentChildNumber;
-
-    if (descriptionRef.current!.value === "" || undefined) {
+      onSaveClose();
+      // ! A hard fix - using the 'timeout' on axois request to
+      // ! refresh the page after sending data. I don't know why
+      // ! but when this axios code is run, it send data but does
+      // ! not continue with the rest of this function
+      await axios
+        .post(`${PROXY}/segments`, newDoughnutSegmentData, {
+          timeout: AXOIS_TIMEOUT_DURATION,
+        })
+        .catch((err) => console.log(err));
+    } else {
       return window.alert("Looks like didn't input any data! Try again");
     }
-    console.log(
-      `Apparently we have: ${Object.entries(newDoughnutSegmentData)}`
-    );
-
-    axios
-      .post(`${PROXY}/segments`, newDoughnutSegmentData)
-      .catch((err) => console.log(err))
-      .then((res) => console.log(res));
-    onClose(e);
   };
+
+  function keyDownHandler(e: React.KeyboardEvent) {
+    if (e.key === "Enter") {
+      onCloseAndSaveData();
+    }
+  }
 
   // ? I'm adding in a dynamic variable so that state also controls
   // ? if this portal is visible to the user or not
@@ -74,6 +90,7 @@ const CreateDataPortal: React.FC<Modal> = ({
             required
             className="create-modal__form-details__textarea"
             ref={descriptionRef}
+            onKeyDown={keyDownHandler}
           />
         </form>
         <button

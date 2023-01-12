@@ -33,25 +33,28 @@
   --main-app-text-color-2: rgb(42, 205, 85);
 }
 
-main {
-  display: flex;
-  flex-direction: row;
-  min-width: 700px;
-}
-
-.app-background,
-.app-column {
-  min-height: 100vh;
-  background-color: var(--main-app-bg-color-1);
-}
-
-.app-background {
-  display: flex;
-  overflow: auto;
-  flex-direction: column;
-  min-width: 300px;
+html,
+body {
   width: 100%;
-  padding: auto 3rem;
+  min-width: 700px;
+  height: 100%;
+}
+
+body {
+  min-width: 700px;
+  height: 100%;
+  display: flex;
+  background-size: cover;
+  background-color: var(--main-app-bg-color-1);
+  justify-content: center;
+  align-content: center;
+}
+
+.app-container {
+  display: flex;
+  flex-direction: column;
+  min-width: 500px;
+  min-height: 800px;
 }
 
 .app-heading {
@@ -59,7 +62,8 @@ main {
   font-style: normal;
   font-weight: normal;
   font-size: 4.5rem;
+  text-align: center;
   color: var(--main-app-text-color-1);
-  margin: 2.5rem auto 0 auto;
+  margin: 0.75em auto 0.75em auto;
   min-height: 6rem;
 }

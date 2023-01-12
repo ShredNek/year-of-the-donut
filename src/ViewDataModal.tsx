@@ -3,11 +3,13 @@ import ReactDom from "react-dom";
 import "./styles/ViewDataModal.css";
 import { TfiClose } from "react-icons/tfi";
 import axios from "axios";
-import { MONTH_NAME_KEY, PROXY } from "./Doughnut";
+import { MONTH_NAME_KEY, PROXY, AXOIS_TIMEOUT_DURATION } from "./Doughnut";
+import { containsCharacters } from "./CreateDataModal";
 
 interface PortalChildren {
   isOpen: boolean;
-  onClose: React.MouseEventHandler<HTMLButtonElement>;
+  onSaveClose: Function;
+  onNoSaveClose: Function;
   doughnutSegmentChildNumber: number;
   doughnutSegmentDescription: string;
 }
@@ -20,7 +22,8 @@ class DoughnutSegmentDataModel {
 
 const CreateViewPortal: React.FC<PortalChildren> = ({
   isOpen,
-  onClose,
+  onSaveClose,
+  onNoSaveClose,
   doughnutSegmentChildNumber,
   doughnutSegmentDescription,
 }: PortalChildren) => {
@@ -35,7 +38,7 @@ const CreateViewPortal: React.FC<PortalChildren> = ({
     setTimeout(() => {
       if (editButtonEngaged == true) setEditButtonEngaged(false);
     }, 750);
-    onClose(e);
+    onNoSaveClose(e);
   };
 
   const onEditButtonClick = () => {
@@ -43,39 +46,52 @@ const CreateViewPortal: React.FC<PortalChildren> = ({
     if (editButtonEngaged == false) setEditButtonEngaged(true);
   };
 
-  const onCloseAndSaveData = async (
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
-  ) => {
-    // e.preventDefault();
-    // location.reload();
-    newDoughnutSegmentData.description = descriptionRef.current!.value;
-    newDoughnutSegmentData.childNumber = doughnutSegmentChildNumber;
-    if (descriptionRef.current?.value === "" || undefined) {
-      return window.alert("Looks like you didn't input any data! Try again");
+  const onCloseAndSaveData = async (e?: React.MouseEvent) => {
+    if (containsCharacters(descriptionRef.current!.value)) {
+      newDoughnutSegmentData.description = descriptionRef.current!.value;
+      newDoughnutSegmentData.childNumber = doughnutSegmentChildNumber;
+
+      onSaveClose();
+      setTimeout(() => onEditButtonClick(), 750);
+      // ! A hard fix - using the 'timeout' on axois request to
+      // ! refresh the page after sending data. I don't know why
+      // ! but when this axios code is run, it send data but does
+      // ! not continue with the rest of this function
+      await axios
+        .put(
+          `${PROXY}/edit/${doughnutSegmentChildNumber}`,
+          newDoughnutSegmentData,
+          { timeout: AXOIS_TIMEOUT_DURATION }
+        )
+        .catch((e) => console.error(e));
+    } else {
+      descriptionRef.current?.value === "";
+      return window.alert("Looks like didn't input any data! Try again");
     }
-
-    axios
-      .put(
-        `${PROXY}/edit/${doughnutSegmentChildNumber}`,
-        newDoughnutSegmentData
-      )
-      .then((res) => console.log(res));
-    setTimeout(() => onEditButtonClick(), 750);
-    onClose(e);
   };
 
-  const onDeleteButtonClick = async (
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
-  ) => {
-    // e.preventDefault();
-    // location.reload();
+  const onDeleteButtonClick = async (e?: React.MouseEvent) => {
     newDoughnutSegmentData.childNumber = doughnutSegmentChildNumber;
 
-    axios
-      .delete(`${PROXY}/delete/${doughnutSegmentChildNumber}`)
-      .then((res) => console.log(res));
-    onClose(e);
+    onSaveClose();
+    // ! A hard fix - using the 'timeout' on axois request to
+    // ! refresh the page after sending data. I don't know why
+    // ! but when this axios code is run, it send data but does
+    // ! not continue with the rest of this function
+    await axios
+      .delete(`${PROXY}/delete/${doughnutSegmentChildNumber}`, {
+        timeout: AXOIS_TIMEOUT_DURATION,
+      })
+      .catch((e) => console.error(e));
+    console.log("AXIOS PASSED");
   };
+
+  function keyDownHandler(e: React.KeyboardEvent) {
+    console.log(e);
+    if (e.key === "Enter") {
+      onCloseAndSaveData();
+    }
+  }
 
   // ? we're adding in a dynamic variable so that state also controls
   // ? if we can see this portal or not
@@ -104,6 +120,7 @@ const CreateViewPortal: React.FC<PortalChildren> = ({
             className={`view-modal__form-details__textarea--shown-${editButtonEngaged}`}
             defaultValue={doughnutSegmentDescription}
             ref={descriptionRef}
+            onKeyDown={keyDownHandler}
           />
         </form>
         <div

@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import "./styles/Doughtnut.css";
 import YearDataModal from "./YearDataModal";
 import DoughnutSegment from "./DoughnutSegment";
 import axios from "axios";
+import "./styles/Doughtnut.css";
 
 interface DoughnutSegmentData {
   segmentState: string;
@@ -11,7 +11,8 @@ interface DoughnutSegmentData {
   _id: string;
 }
 
-export const PROXY = "http://localhost:3001";
+export const PROXY =
+  "https://australia-southeast1-year-of-the-donut.cloudfunctions.net/server";
 
 export const MONTH_NAME_KEY = {
   1: "January",
@@ -29,6 +30,10 @@ export const MONTH_NAME_KEY = {
   13: "ERROR: MONTHNAME NOT FOUND",
 };
 
+export const AXOIS_TIMEOUT_DURATION = 2000;
+
+export const MODAL_CSS_TRANSFORM_DURATION = 500;
+
 const Doughnut: React.FC = () => {
   const [doughnutSegmentData, setDoughnutSegmentData] =
     useState<DoughnutSegmentData[]>();
@@ -38,26 +43,15 @@ const Doughnut: React.FC = () => {
   const [wholeYearOfData, setWholeYearOfData] = useState([{}]);
 
   async function getDoughnutData() {
-    console.log("Sending req - let's get this bread");
-    return await axios
+    let res = await axios
       .get(`${PROXY}/segments`)
-      // .get(`/segments`)
       .catch((err) => console.error(err));
+    if (res === undefined) console.error("could not get /segments");
+    console.log(res);
+    return res?.data;
   }
 
-  // ? Automatically fetches data if it doesn't load on first try
-  // setInterval(() => {
-  //   let response = getDoughnutData()
-  //     .then(() => {
-  //       if (response === undefined) return (response.data = {});
-  //     })
-  //     .catch((e) => console.error(e));
-  //   let processedData = [...response.data];
-  //   let endResult = doughnutDataAlgorythmAndUiSetter(processedData);
-  //   setDoughnutSegmentData(endResult as any[]);
-  // }, 3000);
-
-  function doughnutDataAlgorythmAndUiSetter(d: DoughnutSegmentData[]) {
+  async function doughnutDataAlgorythmAndUiSetter(d: DoughnutSegmentData[]) {
     const maxChildren = 12;
     if (d.length !== maxChildren) {
       let sortedData = [...d];
@@ -103,40 +97,35 @@ const Doughnut: React.FC = () => {
     return d;
   }
 
-  const newDataCall = async () => {
-    setUiHeadingMessage("Loading your data");
-    setDoughnutSegmentData(undefined);
-    setTimeout(async () => {
-      let response = await getDoughnutData().catch((e) => console.error(e));
-      let processedData = [...response?.data];
-      let endResult = doughnutDataAlgorythmAndUiSetter(processedData);
-      setDoughnutSegmentData(endResult as any[]);
-      console.log("Response received");
-    }, 500);
-  };
+  async function dataCall() {
+    let response = await getDoughnutData();
+    let end = [...response];
+    return end;
+  }
 
   useEffect(() => {
-    const firstDataCall = async () => {
-      setIsActive("inactive");
-      setUiHeadingMessage("Loading your data");
-      let response = await getDoughnutData();
-      setTimeout(() => {
-        let processedData = [...response?.data];
-        let endResult = doughnutDataAlgorythmAndUiSetter(processedData);
-        setDoughnutSegmentData(endResult as any[]);
-      }, 500);
-    };
-    firstDataCall();
+    setIsActive("inactive");
+    setUiHeadingMessage("Loading... please wait");
+    dataCall().then((rawData) =>
+      doughnutDataAlgorythmAndUiSetter(rawData).then((processedData) =>
+        setDoughnutSegmentData(processedData)
+      )
+    );
   }, []);
 
   return (
     <div className="doughnut-container">
       <button
         className={`doughnut-container__heading--${isActive}`}
-        onClick={() => setIsOpen(true)}
+        onClick={() => {
+          if (isActive === "active") {
+            setIsOpen(true);
+          }
+        }}
       >
         {uiHeadingMessage}
       </button>
+
       <div className="doughnut-container__doughnut">
         <div className="doughnut-container__doughnut__doughnut-hole"></div>
         <div id="doughnutSegmentContainer">
@@ -148,8 +137,16 @@ const Doughnut: React.FC = () => {
                 status={segment.segmentState}
                 description={segment.description}
                 closeSegmentFunction={() => {
-                  console.log("Bubble up recieved. Calling new data...");
-                  newDataCall();
+                  setUiHeadingMessage("Making your donut!");
+                  dataCall().then((rawData) =>
+                    doughnutDataAlgorythmAndUiSetter(rawData).then(
+                      (processedData) => setDoughnutSegmentData(processedData)
+                    )
+                  );
+                }}
+                setUserDataToUndefined={() => {
+                  setDoughnutSegmentData(undefined);
+                  setUiHeadingMessage("Sending month to dounut...");
                 }}
               />
             ))
@@ -167,7 +164,7 @@ const Doughnut: React.FC = () => {
         onClose={() => {
           setIsOpen(false);
         }}
-        allData={wholeYearOfData as []}
+        allData={wholeYearOfData as DoughnutSegmentData[]}
       ></YearDataModal>
     </div>
   );

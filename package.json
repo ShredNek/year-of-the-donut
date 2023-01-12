@@ -1,12 +1,11 @@
 {
-  "name": "time-count",
+  "name": "year-of-the-donut",
   "private": true,
-  "version": "0.0.0",
-  "type": "module",
-  "proxy": "http://localhost:3001",
+  "version": "1.0.0",
   "scripts": {
-    "dev": "vite && nodemon server.js",
+    "dev": "vite",
     "devStart": "nodemon server.js",
+    "prodStart": "vite & nodemon server.js",
     "build": "tsc && vite build",
     "preview": "vite preview"
   },
@@ -15,6 +14,7 @@
     "cors": "^2.8.5",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
+    "firebase-functions": "^4.1.1",
     "fontawesome": "^5.6.3",
     "jspdf": "^2.5.1",
     "jspdf-autotable": "^3.5.28",

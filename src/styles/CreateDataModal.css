@@ -18,7 +18,8 @@ button {
   position: fixed;
   display: flex;
   flex-direction: column;
-  width: 500px;
+  max-width: 600px;
+  min-width: 400px;
   top: 50%;
   left: 50%;
   translate: -50% -50%;
@@ -26,7 +27,7 @@ button {
   color: black;
   border-radius: 3px;
   z-index: 200;
-  padding: 2rem;
+  padding: 1rem;
   transition: all var(--create-modal-transition-time-1) ease-in-out;
 }
 

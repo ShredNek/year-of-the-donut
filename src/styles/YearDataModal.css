@@ -18,7 +18,8 @@ button {
   position: fixed;
   display: flex;
   flex-direction: column;
-  width: 500px;
+  max-width: 600px;
+  min-width: 400px;
   top: 50%;
   left: 50%;
   translate: -50% -50%;

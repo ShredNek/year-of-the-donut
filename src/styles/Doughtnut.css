@@ -25,12 +25,13 @@
   margin: 2rem auto 4rem auto;
   background-color: var(--doughnut-container-bg-color);
   min-height: 600px;
-  min-width: 600px;
+  width: 600px;
   box-shadow: var(--box-shadow-default);
 }
 
 .doughnut-container__heading--inactive,
-.doughnut-container__heading--active {
+.doughnut-container__heading--active,
+.doughnut-container__heading-- {
   display: block;
   font-family: cantarell;
   font-style: italic;
@@ -48,10 +49,12 @@
   transition-timing-function: ease-in-out;
 }
 
-.doughnut-container__heading--inactive {
+.doughnut-container__heading--inactive,
+.doughnut-container__heading-- {
   color: var(--doughnut-color);
   border-style: dashed;
   border-color: var(--doughnut-color);
+  cursor: default;
 }
 
 .doughnut-container__heading--active {
