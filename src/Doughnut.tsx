@@ -11,8 +11,9 @@ interface DoughnutSegmentData {
   _id: string;
 }
 
-export const PROXY =
-  "https://australia-southeast1-year-of-the-donut.cloudfunctions.net/server";
+export const PROXY = import.meta.env.VITE_SERVER_URL;
+
+// export const PROXY = `http://localhost:${import.meta.env.VITE_PORT}`;
 
 export const MONTH_NAME_KEY = {
   1: "January",
@@ -47,7 +48,6 @@ const Doughnut: React.FC = () => {
       .get(`${PROXY}/segments`)
       .catch((err) => console.error(err));
     if (res === undefined) console.error("could not get /segments");
-    console.log(res);
     return res?.data;
   }
 

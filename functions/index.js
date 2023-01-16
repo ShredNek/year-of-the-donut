@@ -2,6 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
 const functions = require("firebase-functions");
+require("dotenv").config();
 
 const app = express();
 
@@ -21,23 +22,21 @@ const doughnutSegmentDataSchema = mongoose.Schema({
   childNumber: Number,
 });
 
+console.log(process.env.MONGO_DB_URI);
+
 const SegmentData = mongoose.model("SegmentData", doughnutSegmentDataSchema);
 
 mongoose
-  .connect(
-    "mongodb+srv://new-user_1:user1@cluster0.mklub.mongodb.net/time-count"
-  )
+  .connect(process.env.MONGO_DB_URI)
   .then(console.log("we in de mongodb"));
 
 app.get("/segments", (req, res) => {
-  console.log("Getting data");
   SegmentData.find().then((items) => {
-    res.send(res.json(items));
+    res.send(items);
   });
 });
 
 app.post("/segments", (req, res) => {
-  console.log("Posting");
   SegmentData.create({
     segmentState: req.body.segmentState,
     description: req.body.description,
@@ -47,8 +46,7 @@ app.post("/segments", (req, res) => {
     .catch((err) => console.error(err));
 });
 
-app.put("/segments/edit/:childNumber", (req, res) => {
-  console.log("Editing");
+app.put("/edit/:childNumber", (req, res) => {
   SegmentData.findOneAndUpdate(
     { childNumber: req.params.childNumber },
     {
@@ -61,12 +59,15 @@ app.put("/segments/edit/:childNumber", (req, res) => {
     .catch((err) => console.log(err));
 });
 
-app.delete("/segments/delete/:childNumber", (req, res) => {
-  console.log("Deleting");
+app.delete("/delete/:childNumber", (req, res) => {
   console.log(req.params.childNumber);
   SegmentData.findOneAndDelete({ childNumber: req.params.childNumber })
     .then((doc) => console.log(doc))
     .catch((err) => console.log(err));
 });
+
+// app.listen(process.env.VITE_PORT, () =>
+//   console.log(`Listening on ${process.env.VITE_PORT}`)
+// );
 
 exports.server = functions.region("australia-southeast1").https.onRequest(app);
